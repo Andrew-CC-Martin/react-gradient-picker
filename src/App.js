@@ -9,10 +9,17 @@ class App extends React.Component {
     ]
   }
 
+  componentDidMount() {
+    const colors = localStorage.getItem("colors")
+    colors && this.setState({ colors: JSON.parse(colors) })
+  }
+
   updateColors = (event, i) => {
     const newColors = this.state.colors.slice()
     newColors[i] = event.target.value
     this.setState({ colors: newColors })
+
+    localStorage.setItem("colors", JSON.stringify(newColors))
   }
 
   render() {
