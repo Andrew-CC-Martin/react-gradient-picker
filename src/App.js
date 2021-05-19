@@ -17,6 +17,7 @@ class App extends React.Component {
 
   render() {
     const { colors } = this.state
+    const css = `background-image: linear-gradient(${colors[0]}, ${colors[1]});`
 
     return (
       <MainDiv colors={colors}>
@@ -28,10 +29,17 @@ class App extends React.Component {
                 type="color"
                 value={color}
                 onChange={(event) => this.updateColors(event, i)}
+                key={i}
               />
             )
           })}
         </div>
+        <h4>
+          Your CSS is:
+        </h4>
+        <code>
+          {css}
+        </code>
       </MainDiv>
     )
   }
