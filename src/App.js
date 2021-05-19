@@ -1,6 +1,8 @@
 import React from "react"
 
 import { MainDiv } from "./styled-components"
+import { generateCSSString } from "./utils"
+import { ColorPickers } from "./components/color-picker"
 
 class App extends React.Component {
   state = {
@@ -19,11 +21,11 @@ class App extends React.Component {
   }
 
   updateColors = (event, i) => {
-    const newColors = this.state.colors.slice()
-    newColors[i] = event.target.value
-    this.setState({ colors: newColors })
+    const colors = this.state.colors.slice()
+    colors[i] = event.target.value
+    this.setState({ colors })
 
-    localStorage.setItem("colors", JSON.stringify(newColors))
+    localStorage.setItem("colors", JSON.stringify(colors))
   }
 
   updateRotation = (event) => {
@@ -35,16 +37,31 @@ class App extends React.Component {
     }
   }
 
-  // todo - add ability to add a new color, and make 3+ color gradients
+  addColor = () => {
+    const colors = this.state.colors.slice()
+    colors.push("#000000")
+    this.setState({ colors })
+  }
+
+  removeColor = (i) => {
+    // clone color state
+    const colors = this.state.colors.slice()
+    // delete index i
+    colors.splice(i, 1)
+    // set new state
+    this.setState({ colors })
+
+    // update local storage
+    localStorage.setItem("colors", JSON.stringify(colors))
+  }
 
   render() {
     const { colors, degreesRotation } = this.state
-    const css = `background-image: linear-gradient(${degreesRotation}deg, ${colors[0]}, ${colors[1]});`
+    const css = `background-image: linear-gradient(${generateCSSString({ colors, degreesRotation })});`
 
     return (
       <MainDiv colors={colors} degreesRotation={degreesRotation}>
         <h1>Background gradient picker</h1>
-
         <div>
           <label htmlFor="degrees">
             Degrees Rotation
@@ -57,22 +74,13 @@ class App extends React.Component {
             max={359}
             min={0}
           />
-          {colors.map((color, i) => {
-            return (
-              <React.Fragment key={i}>
-                <label htmlFor="degrees">
-                  Color {i + 1}
-                </label>
-                <input
-                  type="color"
-                  value={color}
-                  onChange={(event) => this.updateColors(event, i)}
-                />
-              </React.Fragment>
-            )
-          })}
+          <ColorPickers
+            colors={colors}
+            updateColors={this.updateColors}
+            removeColor={this.removeColor}
+          />
+        <button onClick={this.addColor}>Add Color</button>
         </div>
-
         <h4>
           Your CSS is:
         </h4>
