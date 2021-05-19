@@ -4,22 +4,33 @@ import { MainDiv } from "./styled-components"
 
 class App extends React.Component {
   state = {
-    color1: "#000000",
-    color2: "#000000"
+    colors: [
+      "#000000", "#000000"
+    ]
   }
 
-  updateColor1 = (event) => this.setState({ color1: event.target.value })
-  updateColor2 = (event) => this.setState({ color2: event.target.value })
+  updateColors = (event, i) => {
+    const newColors = this.state.colors.slice()
+    newColors[i] = event.target.value
+    this.setState({ colors: newColors })
+  }
 
   render() {
-    const { color1, color2 } = this.state
+    const { colors } = this.state
 
     return (
-      <MainDiv color1={color1} color2={color2}>
+      <MainDiv colors={colors}>
         <h1>Background gradient picker</h1>
         <div>
-          <input type="color" value={color1} onChange={this.updateColor1} />
-          <input type="color" value={color2} onChange={this.updateColor2} />
+          {colors.map((color, i) => {
+            return (
+              <input
+                type="color"
+                value={color}
+                onChange={(event) => this.updateColors(event, i)}
+              />
+            )
+          })}
         </div>
       </MainDiv>
     )
