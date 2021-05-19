@@ -35,6 +35,8 @@ class App extends React.Component {
     }
   }
 
+  // todo - add ability to add a new color, and make 3+ color gradients
+
   render() {
     const { colors, degreesRotation } = this.state
     const css = `background-image: linear-gradient(${degreesRotation}deg, ${colors[0]}, ${colors[1]});`
