@@ -14,3 +14,7 @@ body {
 code {
   font-size: 24px;
 }
+
+input {
+  margin: 5px;
+}
